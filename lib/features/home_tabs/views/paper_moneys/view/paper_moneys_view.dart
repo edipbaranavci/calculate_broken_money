@@ -10,7 +10,6 @@ import '../../../../../core/constants/money_counts.dart';
 import '../../../../../core/constants/strings/paper_strings.dart';
 import '../../../../../core/constants/strings/project_strings.dart';
 import '../../../../../core/models/paper_money_model.dart';
-import '../../../../../product/ads/view/ads_view.dart';
 import '../../paper_money_add/view/paper_money_add_view.dart';
 
 class PaperMoneys extends StatelessWidget {
@@ -54,19 +53,8 @@ class PaperMoneys extends StatelessWidget {
                 itemCount: box.values.length,
                 shrinkWrap: true,
                 reverse: true,
-                itemBuilder: (context, index) {
-                  final model = box.getAt(index);
-                  if ((index % 3) == 0 && index != 0) {
-                    return Column(
-                      children: [
-                        const Card(child: AdsBanner()),
-                        buildCard(context, model, box, index)
-                      ],
-                    );
-                  } else {
-                    return buildCard(context, model, box, index);
-                  }
-                },
+                itemBuilder: (context, index) =>
+                    buildCard(context, box.getAt(index), box, index),
               ),
             );
           }

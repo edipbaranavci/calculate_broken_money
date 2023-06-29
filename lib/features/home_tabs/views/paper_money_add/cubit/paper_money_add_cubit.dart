@@ -23,33 +23,56 @@ class PaperMoneyAddCubit extends Cubit<PaperMoneyAddState> {
   final paper100Controller = TextEditingController();
   final paper200Controller = TextEditingController();
 
-  final result5Controller = TextEditingController(text: '0');
-  final result10Controller = TextEditingController(text: '0');
-  final result20Controller = TextEditingController(text: '0');
-  final result50Controller = TextEditingController(text: '0');
-  final result100Controller = TextEditingController(text: '0');
-  final result200Controller = TextEditingController(text: '0');
+  void changeResult5(String value) {
+    emit(state.copyWith(result5: value));
+    calculateTotalMoney();
+  }
 
-  void paperCalculate({
-    required String stringValue,
-    required int multiplyCount,
-    required TextEditingController resultController,
-  }) {
-    final count = int.tryParse(stringValue) ?? 0;
-    if (count > 0) {
-      resultController.text = (count * multiplyCount).toString();
-    }
+  void changeResult10(String value) {
+    emit(state.copyWith(result10: value));
+    calculateTotalMoney();
+  }
+
+  void changeResult20(String value) {
+    emit(state.copyWith(result20: value));
+    calculateTotalMoney();
+  }
+
+  void changeResult50(String value) {
+    emit(state.copyWith(result50: value));
+    calculateTotalMoney();
+  }
+
+  void changeResult100(String value) {
+    emit(state.copyWith(result100: value));
+    calculateTotalMoney();
+  }
+
+  void changeResult200(String value) {
+    emit(state.copyWith(result200: value));
+    calculateTotalMoney();
+  }
+
+  void calculateTotalMoney() {
+    int paper5 = int.parse(state.result5);
+    int paper10 = int.parse(state.result10);
+    int paper20 = int.parse(state.result20);
+    int paper50 = int.parse(state.result50);
+    int paper100 = int.parse(state.result100);
+    int paper200 = int.parse(state.result200);
+    int total = paper5 + paper10 + paper20 + paper50 + paper100 + paper200;
+    emit(state.copyWith(totalMoney: total.toString()));
   }
 
   Future<void> submitBox() async {
     final format = DateFormat.yMMMMEEEEd('tr');
     final date = format.format(DateTime.now());
-    int paper5 = int.parse(result5Controller.text);
-    int paper10 = int.parse(result10Controller.text);
-    int paper20 = int.parse(result20Controller.text);
-    int paper50 = int.parse(result50Controller.text);
-    int paper100 = int.parse(result100Controller.text);
-    int paper200 = int.parse(result200Controller.text);
+    int paper5 = int.parse(state.result5);
+    int paper10 = int.parse(state.result10);
+    int paper20 = int.parse(state.result20);
+    int paper50 = int.parse(state.result50);
+    int paper100 = int.parse(state.result100);
+    int paper200 = int.parse(state.result200);
     int total = paper5 + paper10 + paper20 + paper50 + paper100 + paper200;
 
     final model = PaperMoneyModel(
@@ -70,4 +93,11 @@ class PaperMoneyAddCubit extends Cubit<PaperMoneyAddState> {
       scaffoldKey.showGreatSnackBar(PaperStrings.instance.submittedMessage);
     });
   }
+
+  // @override
+  // void onChange(Change<PaperMoneyAddState> change) {
+  //   calculateTotalMoney();
+  //   print('object');
+  //   super.onChange(change);
+  // }
 }

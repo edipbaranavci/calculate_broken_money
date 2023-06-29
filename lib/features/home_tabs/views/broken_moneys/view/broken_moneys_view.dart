@@ -7,7 +7,6 @@ import '../../../../../core/constants/money_grams.dart';
 import '../../../../../core/constants/strings/broken_strings.dart';
 import '../../../../../core/constants/strings/project_strings.dart';
 import '../../../../../core/models/broken_money_model.dart';
-import '../../../../../product/ads/view/ads_view.dart';
 import '../../broken_money_add/view/broken_money_add_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -54,19 +53,8 @@ class BrokenMoneys extends StatelessWidget {
                 itemCount: box.values.length,
                 shrinkWrap: true,
                 reverse: true,
-                itemBuilder: (context, index) {
-                  final model = box.getAt(index);
-                  if ((index % 3) == 0 && index != 0) {
-                    return Column(
-                      children: [
-                        const Card(child: AdsBanner()),
-                        buildCard(context, model, box, index)
-                      ],
-                    );
-                  } else {
-                    return buildCard(context, model, box, index);
-                  }
-                },
+                itemBuilder: (context, index) =>
+                    buildCard(context, box.getAt(index), box, index),
               ),
             );
           }

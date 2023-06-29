@@ -3,19 +3,18 @@ import 'package:kartal/kartal.dart';
 
 import '../button/custom_icon_button.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
 
   final String title;
   final VoidCallback? onBackTap;
 
-  CustomAppBar({
-    Key? key,
+  const CustomAppBar({
+    super.key,
     this.onBackTap,
     required this.title,
-  })  : preferredSize = const Size.fromHeight(56.0),
-        super(key: key);
+  }) : preferredSize = const Size.fromHeight(56.0);
 
   @override
   Widget build(BuildContext context) {

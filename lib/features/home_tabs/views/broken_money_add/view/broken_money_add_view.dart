@@ -6,7 +6,6 @@ import '../../../../../core/components/app_bar/custom_app_bar.dart';
 import '../../../../../core/constants/money_counts.dart';
 import '../../../../../core/constants/money_grams.dart';
 import '../../../../../core/constants/strings/broken_strings.dart';
-import '../../../../../product/ads/view/ads_view.dart';
 import '../cubit/broken_money_add_cubit.dart';
 
 class BrokenMoneyAddView extends StatelessWidget {
@@ -34,7 +33,6 @@ class _BrokenMoneyAddView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildCoumn(context),
-            const AdsBanner(),
             submitButton(context),
           ],
         ),

@@ -1,11 +1,10 @@
-import 'package:calculate_broken_money/core/components/app_bar/custom_app_bar.dart';
+import '../../../../../core/components/app_bar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kartal/kartal.dart';
 
 import '../../../../../core/constants/money_counts.dart';
 import '../../../../../core/constants/strings/paper_strings.dart';
-import '../../../../../product/ads/view/ads_view.dart';
 import '../cubit/paper_money_add_cubit.dart';
 
 class PaperMoneyAddView extends StatelessWidget {
@@ -32,61 +31,90 @@ class _PaperMoneyAddView extends StatelessWidget {
     );
   }
 
-  SingleChildScrollView buildContent(BuildContext context) {
+  Widget buildContent(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           buildColumn(context),
-          const AdsBanner(),
+          Row(
+            children: [
+              moneyDescriptionContainerItem(context, 'Toplam Tutar:'),
+              context.emptySizedWidthBoxNormal,
+              Expanded(
+                flex: 3,
+                child: Center(
+                  child: BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
+                    builder: (context, state) {
+                      return Text(
+                        '${state.totalMoney}₺',
+                        style: context.textTheme.bodyLarge,
+                      );
+                    },
+                  ),
+                ),
+              ),
+              const Expanded(flex: 2, child: SizedBox.shrink()),
+            ],
+          ),
           submitButton(context),
         ],
       ),
     );
   }
 
-  Column buildColumn(BuildContext context) {
+  Widget buildColumn(BuildContext context) {
     final cubit = context.read<PaperMoneyAddCubit>();
-    return Column(
-      children: [
-        buildDescriptionTitles(),
-        buildRow(
-          context,
-          countController: cubit.paper5Controller,
-          multiplyCount: PaperMoneyCounts.moneyCount5,
-          resultController: cubit.result5Controller,
-        ),
-        buildRow(
-          context,
-          countController: cubit.paper10Controller,
-          multiplyCount: PaperMoneyCounts.moneyCount10,
-          resultController: cubit.result10Controller,
-        ),
-        buildRow(
-          context,
-          countController: cubit.paper20Controller,
-          multiplyCount: PaperMoneyCounts.moneyCount20,
-          resultController: cubit.result20Controller,
-        ),
-        buildRow(
-          context,
-          countController: cubit.paper50Controller,
-          multiplyCount: PaperMoneyCounts.moneyCount50,
-          resultController: cubit.result50Controller,
-        ),
-        buildRow(
-          context,
-          countController: cubit.paper100Controller,
-          multiplyCount: PaperMoneyCounts.moneyCount100,
-          resultController: cubit.result100Controller,
-        ),
-        buildRow(
-          context,
-          countController: cubit.paper200Controller,
-          multiplyCount: PaperMoneyCounts.moneyCount200,
-          resultController: cubit.result200Controller,
-        ),
-      ],
+    return BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            buildDescriptionTitles(),
+            buildRowString(
+              context,
+              onChangedValue: (value) => cubit.changeResult5(value),
+              countController: cubit.paper5Controller,
+              resultString: state.result5,
+              multiplyCount: PaperMoneyCounts.moneyCount5,
+            ),
+            buildRowString(
+              context,
+              resultString: state.result10,
+              onChangedValue: (value) => cubit.changeResult10(value),
+              countController: cubit.paper10Controller,
+              multiplyCount: PaperMoneyCounts.moneyCount10,
+            ),
+            buildRowString(
+              context,
+              resultString: state.result20,
+              onChangedValue: (value) => cubit.changeResult20(value),
+              countController: cubit.paper20Controller,
+              multiplyCount: PaperMoneyCounts.moneyCount20,
+            ),
+            buildRowString(
+              context,
+              resultString: state.result50,
+              onChangedValue: (value) => cubit.changeResult50(value),
+              countController: cubit.paper50Controller,
+              multiplyCount: PaperMoneyCounts.moneyCount50,
+            ),
+            buildRowString(
+              context,
+              resultString: state.result100,
+              onChangedValue: (value) => cubit.changeResult100(value),
+              countController: cubit.paper100Controller,
+              multiplyCount: PaperMoneyCounts.moneyCount100,
+            ),
+            buildRowString(
+              context,
+              resultString: state.result200,
+              onChangedValue: (value) => cubit.changeResult200(value),
+              countController: cubit.paper200Controller,
+              multiplyCount: PaperMoneyCounts.moneyCount200,
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -99,42 +127,36 @@ class _PaperMoneyAddView extends StatelessWidget {
     );
   }
 
-  Widget buildRow(
+  Widget buildRowString(
     BuildContext context, {
     required TextEditingController countController,
-    required TextEditingController resultController,
+    required String resultString,
     required int multiplyCount,
+    required void Function(String value) onChangedValue,
   }) {
-    final cubit = context.read<PaperMoneyAddCubit>();
     return Padding(
       padding: context.verticalPaddingLow,
-      child: Builder(builder: (contextState) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            moneyDescriptionContainerItem(
-              context,
-              '$multiplyCount₺',
-            ),
-            Expanded(
-              flex: 4,
-              child: SizedBox(
-                height: context.normalValue * 3,
-                child: buildTextFieldItem(
-                  PaperStrings.instance.moneyCountTitle,
-                  controller: countController,
-                  onSubmitted: (String value) => cubit.paperCalculate(
-                    multiplyCount: multiplyCount,
-                    resultController: resultController,
-                    stringValue: value,
-                  ),
-                ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          moneyDescriptionContainerItem(
+            context,
+            '$multiplyCount₺',
+          ),
+          Expanded(
+            flex: 4,
+            child: SizedBox(
+              height: context.normalValue * 3,
+              child: buildTextFieldItemString(
+                PaperStrings.instance.moneyCountTitle,
+                onChanged: (value) => onChangedValue(
+                    ((int.tryParse(value) ?? 0) * multiplyCount).toString()),
               ),
             ),
-            buildExportMoneyItem(context, resultController.text),
-          ],
-        );
-      }),
+          ),
+          buildExportMoneyItem(context, resultString),
+        ],
+      ),
     );
   }
 
@@ -176,7 +198,7 @@ class _PaperMoneyAddView extends StatelessWidget {
         padding: context.paddingLow,
         margin: context.paddingLow,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: context.lowBorderRadius,
           border: Border.all(
             color: context.colorScheme.primary,
             width: 2,
@@ -187,24 +209,20 @@ class _PaperMoneyAddView extends StatelessWidget {
     );
   }
 
-  Widget buildTextFieldItem(
+  Widget buildTextFieldItemString(
     String label, {
-    Function(String)? onSubmitted,
-    required TextEditingController controller,
+    void Function(String)? onChanged,
   }) {
-    return Builder(builder: (context) {
-      return TextField(
-        keyboardType: TextInputType.number,
-        maxLines: 1,
-        controller: controller,
-        onSubmitted: onSubmitted,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          hintText: label,
-          label: Text(label),
-        ),
-      );
-    });
+    return TextField(
+      keyboardType: TextInputType.number,
+      maxLines: 1,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        hintText: label,
+        label: Text(label),
+      ),
+    );
   }
 
   Widget buildExportMoneyItem(BuildContext context, String money) {
