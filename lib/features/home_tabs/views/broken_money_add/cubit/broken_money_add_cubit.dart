@@ -1,4 +1,3 @@
-import 'package:calculate_broken_money/core/extensions/scaffold_messenger/snack_bar.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/strings/broken_strings.dart';
 import '../../../../../core/constants/strings/project_strings.dart';
+import '../../../../../core/extensions/scaffold_messenger/snack_bar.dart';
 import '../../../../../core/models/broken_money_model.dart';
 
 part 'broken_money_add_state.dart';
@@ -26,57 +26,90 @@ class BrokenMoneyAddCubit extends Cubit<BrokenMoneyAddState> {
   final gram010Controller = TextEditingController();
   final gram005Controller = TextEditingController();
 
-  final resultMoney1 = TextEditingController(text: '0');
-  final resultMoney050 = TextEditingController(text: '0');
-  final resultMoney025 = TextEditingController(text: '0');
-  final resultMoney010 = TextEditingController(text: '0');
-  final resultMoney005 = TextEditingController(text: '0');
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  void changeResultMoney005(String value) {
+    emit(state.copyWith(resultMoney005: value));
+    calculateTotalMoney();
+  }
+
+  void changeResultMoney010(String value) {
+    emit(state.copyWith(resultMoney010: value));
+    calculateTotalMoney();
+  }
+
+  void changeResultMoney025(String value) {
+    emit(state.copyWith(resultMoney025: value));
+    calculateTotalMoney();
+  }
+
+  void changeResultMoney050(String value) {
+    emit(state.copyWith(resultMoney050: value));
+    calculateTotalMoney();
+  }
+
+  void changeResultMoney1(String value) {
+    emit(state.copyWith(resultMoney1: value));
+    calculateTotalMoney();
+  }
+
+  void calculateTotalMoney() {
+    double paper5 = double.parse(state.resultMoney005);
+    double paper10 = double.parse(state.resultMoney010);
+    double paper20 = double.parse(state.resultMoney025);
+    double paper50 = double.parse(state.resultMoney050);
+    double paper100 = double.parse(state.resultMoney1);
+    double total = paper5 + paper10 + paper20 + paper50 + paper100;
+    emit(state.copyWith(totalMoney: total.toStringAsFixed(2)));
+  }
+
   void gramToCount({
-    required TextEditingController resultController,
+    // required String resultString,
     required String stringGram,
     required double bolunecekGram,
     required TextEditingController countController,
     required double carpilacakMoney,
   }) {
-    double returnValue = 0;
+    // double returnValue = 0;
     final gram = double.tryParse(stringGram) ?? 0;
     if (gram > 0) {
       int count = gram ~/ bolunecekGram;
-      returnValue = count * carpilacakMoney;
+      // returnValue = count * carpilacakMoney;
       countController.text = count.toString();
+    } else {
+      countController.text = '';
     }
-    resultController.text = returnValue.toStringAsFixed(2);
+    // resultString = returnValue.toStringAsFixed(2);
   }
 
   void countToGram({
-    required TextEditingController resultController,
+    // required TextEditingController resultController,
     required String stringCount,
     required double carpilacakGram,
     required TextEditingController gramController,
     required double carpilacakMoney,
   }) {
-    double returnValue = 0;
+    // double returnValue = 0;
     final count = int.tryParse(stringCount) ?? 0;
     if (count > 0) {
       double gram = count * carpilacakGram;
-      returnValue = count * carpilacakMoney;
+      // returnValue = count * carpilacakMoney;
       gramController.text = gram.toString();
+    } else {
+      gramController.text = '';
     }
-    resultController.text = returnValue.toStringAsFixed(2);
-    emit(state);
+    // resultController.text = returnValue.toStringAsFixed(2);
+    // emit(state);
   }
 
   Future<void> submitBox() async {
     final format = DateFormat.yMMMMEEEEd('tr');
     final date = format.format(DateTime.now());
-    double money1 = double.parse(resultMoney1.text);
-    double money050 = double.parse(resultMoney050.text);
-    double money025 = double.parse(resultMoney025.text);
-    double money010 = double.parse(resultMoney010.text);
-    double money005 = double.parse(resultMoney005.text);
+    double money1 = double.parse(state.resultMoney1);
+    double money050 = double.parse(state.resultMoney050);
+    double money025 = double.parse(state.resultMoney025);
+    double money010 = double.parse(state.resultMoney010);
+    double money005 = double.parse(state.resultMoney005);
     double totalMoney = money1 + money050 + money025 + money010 + money005;
 
     final model = BrokenMoneyModel(

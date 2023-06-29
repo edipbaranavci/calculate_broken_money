@@ -37,29 +37,36 @@ class _PaperMoneyAddView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           buildColumn(context),
-          Row(
-            children: [
-              moneyDescriptionContainerItem(context, 'Toplam Tutar:'),
-              context.emptySizedWidthBoxNormal,
-              Expanded(
-                flex: 3,
-                child: Center(
-                  child: BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
-                    builder: (context, state) {
-                      return Text(
-                        '${state.totalMoney}₺',
-                        style: context.textTheme.bodyLarge,
-                      );
-                    },
-                  ),
-                ),
-              ),
-              const Expanded(flex: 2, child: SizedBox.shrink()),
-            ],
-          ),
+          buildTotalMoneyTitle(context),
           submitButton(context),
         ],
       ),
+    );
+  }
+
+  Row buildTotalMoneyTitle(BuildContext context) {
+    return Row(
+      children: [
+        moneyDescriptionContainerItem(
+          context,
+          PaperStrings.instance.totalMoneyTitle,
+        ),
+        context.emptySizedWidthBoxNormal,
+        Expanded(
+          flex: 3,
+          child: Center(
+            child: BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
+              builder: (context, state) {
+                return Text(
+                  '${state.totalMoney}₺',
+                  style: context.textTheme.bodyLarge,
+                );
+              },
+            ),
+          ),
+        ),
+        const Expanded(flex: 2, child: SizedBox.shrink()),
+      ],
     );
   }
 

@@ -33,6 +33,8 @@ class _BrokenMoneyAddView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildCoumn(context),
+            context.emptySizedHeightBoxLow,
+            buildTotalMoneyTitle(context),
             submitButton(context),
           ],
         ),
@@ -40,52 +42,98 @@ class _BrokenMoneyAddView extends StatelessWidget {
     );
   }
 
-  Column buildCoumn(BuildContext context) {
+  Widget buildTotalMoneyTitle(BuildContext context) {
+    return Padding(
+      padding: context.horizontalPaddingLow,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: moneyDescriptionContainerItem(
+              context,
+              BrokenStrings.instance.totalMoneyTitle,
+            ),
+          ),
+          context.emptySizedWidthBoxNormal,
+          Expanded(
+            flex: 3,
+            child: Center(
+              child: BlocBuilder<BrokenMoneyAddCubit, BrokenMoneyAddState>(
+                builder: (context, state) {
+                  return Text(
+                    '${state.totalMoney}₺',
+                    style: context.textTheme.bodyLarge,
+                  );
+                },
+              ),
+            ),
+          ),
+          const Expanded(flex: 2, child: SizedBox.shrink()),
+        ],
+      ),
+    );
+  }
+
+  Widget buildCoumn(BuildContext context) {
     final cubit = context.read<BrokenMoneyAddCubit>();
-    return Column(
-      children: [
-        buildDescriptionTitles(),
-        buildRow(
-          context,
-          countController: cubit.count1Controller,
-          divideGram: MoneyGrams.money1Grams,
-          gramController: cubit.gram1Controller,
-          multiplyCount: BrokenMoneyCounts.moneyCount1,
-          resultController: cubit.resultMoney1,
-        ),
-        buildRow(
-          context,
-          countController: cubit.count050Controller,
-          divideGram: MoneyGrams.money050Grams,
-          gramController: cubit.gram050Controller,
-          multiplyCount: BrokenMoneyCounts.moneyCount050,
-          resultController: cubit.resultMoney050,
-        ),
-        buildRow(
-          context,
-          countController: cubit.count025Controller,
-          divideGram: MoneyGrams.money025Grams,
-          gramController: cubit.gram025Controller,
-          multiplyCount: BrokenMoneyCounts.moneyCount025,
-          resultController: cubit.resultMoney025,
-        ),
-        buildRow(
-          context,
-          countController: cubit.count010Controller,
-          divideGram: MoneyGrams.money010Grams,
-          gramController: cubit.gram010Controller,
-          multiplyCount: BrokenMoneyCounts.moneyCount010,
-          resultController: cubit.resultMoney010,
-        ),
-        buildRow(
-          context,
-          countController: cubit.count005Controller,
-          divideGram: MoneyGrams.money005Grams,
-          gramController: cubit.gram005Controller,
-          multiplyCount: BrokenMoneyCounts.moneyCount005,
-          resultController: cubit.resultMoney005,
-        ),
-      ],
+    return BlocBuilder<BrokenMoneyAddCubit, BrokenMoneyAddState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            buildDescriptionTitles(),
+            buildRow(
+              context,
+              countController: cubit.count1Controller,
+              divideGram: MoneyGrams.money1Grams,
+              gramController: cubit.gram1Controller,
+              multiplyCount: BrokenMoneyCounts.moneyCount1,
+              // resultController: cubit.resultMoney1,
+              resultValue: state.resultMoney1,
+              onChangedValue: (value) => cubit.changeResultMoney1(value),
+            ),
+            buildRow(
+              context,
+              countController: cubit.count050Controller,
+              divideGram: MoneyGrams.money050Grams,
+              gramController: cubit.gram050Controller,
+              multiplyCount: BrokenMoneyCounts.moneyCount050,
+              // resultController: cubit.resultMoney050,
+              resultValue: state.resultMoney050,
+              onChangedValue: (value) => cubit.changeResultMoney050(value),
+            ),
+            buildRow(
+              context,
+              countController: cubit.count025Controller,
+              divideGram: MoneyGrams.money025Grams,
+              gramController: cubit.gram025Controller,
+              multiplyCount: BrokenMoneyCounts.moneyCount025,
+              // resultController: cubit.resultMoney025,
+              resultValue: state.resultMoney025,
+              onChangedValue: (value) => cubit.changeResultMoney025(value),
+            ),
+            buildRow(
+              context,
+              countController: cubit.count010Controller,
+              divideGram: MoneyGrams.money010Grams,
+              gramController: cubit.gram010Controller,
+              multiplyCount: BrokenMoneyCounts.moneyCount010,
+              // resultController: cubit.resultMoney010,
+              resultValue: state.resultMoney010,
+              onChangedValue: (value) => cubit.changeResultMoney010(value),
+            ),
+            buildRow(
+              context,
+              countController: cubit.count005Controller,
+              divideGram: MoneyGrams.money005Grams,
+              gramController: cubit.gram005Controller,
+              multiplyCount: BrokenMoneyCounts.moneyCount005,
+              // resultController: cubit.resultMoney005,
+              resultValue: state.resultMoney005,
+              onChangedValue: (value) => cubit.changeResultMoney005(value),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -104,9 +152,10 @@ class _BrokenMoneyAddView extends StatelessWidget {
     BuildContext context, {
     required TextEditingController gramController,
     required TextEditingController countController,
-    required TextEditingController resultController,
+    required String resultValue,
     required double divideGram,
     required double multiplyCount,
+    required void Function(String value) onChangedValue,
   }) {
     final cubit = context.read<BrokenMoneyAddCubit>();
     return Padding(
@@ -124,13 +173,18 @@ class _BrokenMoneyAddView extends StatelessWidget {
             child: buildTextFieldItem(
               BrokenStrings.instance.moneyGramTitle,
               controller: gramController,
-              onChanged: (value) => cubit.gramToCount(
-                stringGram: value,
-                bolunecekGram: divideGram,
-                countController: countController,
-                carpilacakMoney: multiplyCount,
-                resultController: resultController,
-              ),
+              onChanged: (value) {
+                cubit.gramToCount(
+                  stringGram: value,
+                  bolunecekGram: divideGram,
+                  countController: countController,
+                  carpilacakMoney: multiplyCount,
+                  // resultController: resultController,
+                );
+                onChangedValue(((double.tryParse(countController.text) ?? 0) *
+                        multiplyCount)
+                    .toStringAsFixed(2));
+              },
             ),
           ),
           SizedBox(
@@ -139,16 +193,20 @@ class _BrokenMoneyAddView extends StatelessWidget {
             child: buildTextFieldItem(
               BrokenStrings.instance.moneyCountTitle,
               controller: countController,
-              onChanged: (String value) => cubit.countToGram(
-                resultController: resultController,
-                carpilacakGram: divideGram,
-                carpilacakMoney: multiplyCount,
-                gramController: gramController,
-                stringCount: value,
-              ),
+              onChanged: (String value) {
+                cubit.countToGram(
+                  // resultController: resultController,
+                  carpilacakGram: divideGram,
+                  carpilacakMoney: multiplyCount,
+                  gramController: gramController,
+                  stringCount: value,
+                );
+                onChangedValue(((double.tryParse(value) ?? 0) * multiplyCount)
+                    .toStringAsFixed(2));
+              },
             ),
           ),
-          buildExportMoneyItem(context, resultController.text),
+          buildExportMoneyItem(context, resultValue),
         ],
       ),
     );

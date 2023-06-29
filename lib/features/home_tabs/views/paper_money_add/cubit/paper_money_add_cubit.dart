@@ -93,11 +93,4 @@ class PaperMoneyAddCubit extends Cubit<PaperMoneyAddState> {
       scaffoldKey.showGreatSnackBar(PaperStrings.instance.submittedMessage);
     });
   }
-
-  // @override
-  // void onChange(Change<PaperMoneyAddState> change) {
-  //   calculateTotalMoney();
-  //   print('object');
-  //   super.onChange(change);
-  // }
 }

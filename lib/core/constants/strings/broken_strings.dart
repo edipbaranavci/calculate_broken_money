@@ -20,4 +20,5 @@ class BrokenStrings {
   final String submitButtonTitle = 'Kaydet';
   final String fabTitle = 'Bozuk Para Hesapla';
   final String submittedMessage = 'Paranız Hesaplandı!';
+  final String totalMoneyTitle = 'Toplam Tutar:';
 }

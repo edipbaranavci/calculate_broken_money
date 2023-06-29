@@ -18,4 +18,5 @@ class PaperStrings {
   final String submitButtonTitle = 'Kaydet';
   final String fabTitle = 'Kağıt Para Hesapla';
   final String submittedMessage = 'Paranız Hesaplandı!';
+  final String totalMoneyTitle = 'Toplam Tutar:';
 }
