@@ -68,6 +68,10 @@ class PaperMoneys extends StatelessWidget {
       Box<PaperMoneyModel> box, int index) {
     return Card(
       child: ExpansionTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: context.lowBorderRadius,
+        ),
+        childrenPadding: context.paddingLow,
         title: buildDateTitle(context, model),
         children: [
           buildDateAndDeleteTitle(context, model, box, index),
