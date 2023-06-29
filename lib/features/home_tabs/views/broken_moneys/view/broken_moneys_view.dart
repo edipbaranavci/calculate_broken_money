@@ -1,5 +1,5 @@
-import 'package:calculate_broken_money/core/components/button/custom_icon_button.dart';
-import 'package:calculate_broken_money/core/extensions/scaffold_messenger/snack_bar.dart';
+import '../../../../../core/components/button/custom_icon_button.dart';
+import '../../../../../core/extensions/scaffold_messenger/snack_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../core/constants/money_counts.dart';
@@ -35,12 +35,12 @@ class BrokenMoneys extends StatelessWidget {
               children: [
                 Icon(
                   FontAwesomeIcons.boxOpen,
-                  size: context.width * .3,
+                  size: context.sized.width * .3,
                 ),
-                context.emptySizedHeightBoxLow3x,
+                context.sized.emptySizedHeightBoxLow3x,
                 Text(
                   BrokenStrings.instance.emptyBoxMessage,
-                  style: context.textTheme.bodyLarge?.copyWith(
+                  style: context.general.textTheme.bodyLarge?.copyWith(
                     color: Colors.white,
                   ),
                 ),
@@ -48,7 +48,7 @@ class BrokenMoneys extends StatelessWidget {
             ));
           } else {
             return Padding(
-              padding: context.paddingNormal,
+              padding: context.padding.normal,
               child: ListView.builder(
                 itemCount: box.values.length,
                 shrinkWrap: true,
@@ -72,12 +72,12 @@ class BrokenMoneys extends StatelessWidget {
   ) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: context.lowBorderRadius,
+        borderRadius: context.border.lowBorderRadius,
       ),
       child: ExpansionTile(
-        childrenPadding: context.paddingLow,
+        childrenPadding: context.padding.low,
         shape: RoundedRectangleBorder(
-          borderRadius: context.lowBorderRadius,
+          borderRadius: context.border.lowBorderRadius,
         ),
         title: buildDateTitle(context, model),
         children: [
@@ -147,7 +147,7 @@ class BrokenMoneys extends StatelessWidget {
 
   Padding buildDateTitle(BuildContext context, BrokenMoneyModel? model) {
     return Padding(
-      padding: context.verticalPaddingLow,
+      padding: context.padding.verticalLow,
       child: Text(
         '${model?.date ?? ''} - ${BrokenStrings.instance.totalTitle}: ${model?.totalMoney ?? 0}₺',
       ),
@@ -163,7 +163,7 @@ class BrokenMoneys extends StatelessWidget {
     final count = money / multiplyCount;
     final gram = count * divideGram;
     return Padding(
-      padding: context.verticalPaddingLow,
+      padding: context.padding.verticalLow,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -186,8 +186,8 @@ class BrokenMoneys extends StatelessWidget {
       child: Center(
         child: Text(
           title,
-          style: context.textTheme.titleSmall?.copyWith(
-            color: isColor ? context.colorScheme.primary : null,
+          style: context.general.textTheme.titleSmall?.copyWith(
+            color: isColor ? context.general.colorScheme.primary : null,
           ),
         ),
       ),
@@ -197,14 +197,15 @@ class BrokenMoneys extends StatelessWidget {
   Container moneyDescriptionContainerItem(BuildContext context, String title,
       {bool isColor = false}) {
     return Container(
-      width: context.width / 6,
-      height: context.normalValue * 3,
-      padding: context.paddingLow,
+      width: context.sized.width / 6,
+      height: context.sized.normalValue * 3,
+      padding: context.padding.low,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color:
-              isColor ? context.colorScheme.error : context.colorScheme.primary,
+          color: isColor
+              ? context.general.colorScheme.error
+              : context.general.colorScheme.primary,
           width: 2,
         ),
       ),
@@ -219,30 +220,30 @@ class BrokenMoneys extends StatelessWidget {
   Widget buildDescriptionTitles() {
     return Builder(builder: (context) {
       return Padding(
-        padding: context.verticalPaddingLow,
+        padding: context.padding.verticalLow,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             descriptionTitlesItem(
               context,
               BrokenStrings.instance.moneyCategoryTitle,
-              context.highValue,
+              context.sized.highValue,
               isColor: true,
             ),
             descriptionTitlesItem(
               context,
               BrokenStrings.instance.moneyGramTitle,
-              context.highValue,
+              context.sized.highValue,
             ),
             descriptionTitlesItem(
               context,
               BrokenStrings.instance.moneyCountTitle,
-              context.highValue,
+              context.sized.highValue,
             ),
             descriptionTitlesItem(
               context,
               BrokenStrings.instance.moneyResultTitle,
-              context.highValue,
+              context.sized.highValue,
               isColor: true,
             ),
           ],

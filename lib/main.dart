@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:kartal/kartal.dart';
 
 import 'core/constants/strings/project_strings.dart';
 import 'core/models/broken_money_model.dart';
@@ -42,6 +43,13 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.purple,
         brightness: Brightness.dark,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: context.border.lowBorderRadius * 0.5,
+            ),
+          ),
+        ),
       ),
       home: const HomeTabsView(),
     );
