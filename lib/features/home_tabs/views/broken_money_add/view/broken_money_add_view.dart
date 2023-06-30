@@ -35,6 +35,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
             buildCoumn(context),
             context.emptySizedHeightBoxLow,
             buildTotalMoneyTitle(context),
+            context.sized.emptySizedHeightBoxLow,
             submitButton(context),
           ],
         ),
@@ -143,7 +144,10 @@ class _BrokenMoneyAddView extends StatelessWidget {
           .read<BrokenMoneyAddCubit>()
           .submitBox()
           .whenComplete(() => context.pop()),
-      label: Text(BrokenStrings.instance.submitButtonTitle),
+      label: Padding(
+        padding: context.padding.normal,
+        child: Text(BrokenStrings.instance.submitButtonTitle),
+      ),
       icon: const Icon(Icons.save),
     );
   }

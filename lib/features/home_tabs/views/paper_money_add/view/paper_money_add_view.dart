@@ -38,6 +38,7 @@ class _PaperMoneyAddView extends StatelessWidget {
         children: [
           buildColumn(context),
           buildTotalMoneyTitle(context),
+          context.sized.emptySizedHeightBoxLow,
           submitButton(context),
         ],
       ),
@@ -129,7 +130,10 @@ class _PaperMoneyAddView extends StatelessWidget {
     final cubit = context.read<PaperMoneyAddCubit>();
     return ElevatedButton.icon(
       onPressed: () => cubit.submitBox().whenComplete(() => context.pop()),
-      label: Text(PaperStrings.instance.submitButtonTitle),
+      label: Padding(
+        padding: context.padding.normal,
+        child: Text(PaperStrings.instance.submitButtonTitle),
+      ),
       icon: const Icon(Icons.save),
     );
   }
