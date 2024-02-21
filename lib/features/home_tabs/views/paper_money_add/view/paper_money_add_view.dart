@@ -8,7 +8,7 @@ import '../../../../../core/constants/strings/paper_strings.dart';
 import '../cubit/paper_money_add_cubit.dart';
 
 class PaperMoneyAddView extends StatelessWidget {
-  const PaperMoneyAddView({Key? key}) : super(key: key);
+  const PaperMoneyAddView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class PaperMoneyAddView extends StatelessWidget {
 }
 
 class _PaperMoneyAddView extends StatelessWidget {
-  const _PaperMoneyAddView({Key? key}) : super(key: key);
+  const _PaperMoneyAddView();
 
   @override
   Widget build(BuildContext context) {
@@ -34,40 +34,47 @@ class _PaperMoneyAddView extends StatelessWidget {
   Widget buildContent(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           buildColumn(context),
           buildTotalMoneyTitle(context),
           context.sized.emptySizedHeightBoxLow,
-          submitButton(context),
+          Padding(
+            padding: context.padding.horizontalNormal,
+            child: submitButton(context),
+          ),
         ],
       ),
     );
   }
 
-  Row buildTotalMoneyTitle(BuildContext context) {
-    return Row(
-      children: [
-        moneyDescriptionContainerItem(
-          context,
-          PaperStrings.instance.totalMoneyTitle,
-        ),
-        context.emptySizedWidthBoxNormal,
-        Expanded(
-          flex: 3,
-          child: Center(
-            child: BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
-              builder: (context, state) {
-                return Text(
-                  '${state.totalMoney}₺',
-                  style: context.textTheme.bodyLarge,
-                );
-              },
+  Widget buildTotalMoneyTitle(BuildContext context) {
+    return Padding(
+      padding: context.padding.horizontalLow,
+      child: Row(
+        children: [
+          moneyDescriptionContainerItem(
+            context,
+            PaperStrings.instance.totalMoneyTitle,
+          ),
+          context.sized.emptySizedWidthBoxNormal,
+          Expanded(
+            flex: 3,
+            child: Center(
+              child: BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
+                builder: (context, state) {
+                  return Text(
+                    '${state.totalMoney}₺',
+                    style: context.general.textTheme.bodyLarge,
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        const Expanded(flex: 2, child: SizedBox.shrink()),
-      ],
+          const Expanded(flex: 2, child: SizedBox.shrink()),
+        ],
+      ),
     );
   }
 
@@ -75,52 +82,55 @@ class _PaperMoneyAddView extends StatelessWidget {
     final cubit = context.read<PaperMoneyAddCubit>();
     return BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
       builder: (context, state) {
-        return Column(
-          children: [
-            buildDescriptionTitles(),
-            buildRowString(
-              context,
-              onChangedValue: (value) => cubit.changeResult5(value),
-              countController: cubit.paper5Controller,
-              resultString: state.result5,
-              multiplyCount: PaperMoneyCounts.moneyCount5,
-            ),
-            buildRowString(
-              context,
-              resultString: state.result10,
-              onChangedValue: (value) => cubit.changeResult10(value),
-              countController: cubit.paper10Controller,
-              multiplyCount: PaperMoneyCounts.moneyCount10,
-            ),
-            buildRowString(
-              context,
-              resultString: state.result20,
-              onChangedValue: (value) => cubit.changeResult20(value),
-              countController: cubit.paper20Controller,
-              multiplyCount: PaperMoneyCounts.moneyCount20,
-            ),
-            buildRowString(
-              context,
-              resultString: state.result50,
-              onChangedValue: (value) => cubit.changeResult50(value),
-              countController: cubit.paper50Controller,
-              multiplyCount: PaperMoneyCounts.moneyCount50,
-            ),
-            buildRowString(
-              context,
-              resultString: state.result100,
-              onChangedValue: (value) => cubit.changeResult100(value),
-              countController: cubit.paper100Controller,
-              multiplyCount: PaperMoneyCounts.moneyCount100,
-            ),
-            buildRowString(
-              context,
-              resultString: state.result200,
-              onChangedValue: (value) => cubit.changeResult200(value),
-              countController: cubit.paper200Controller,
-              multiplyCount: PaperMoneyCounts.moneyCount200,
-            ),
-          ],
+        return Padding(
+          padding: context.padding.horizontalLow,
+          child: Column(
+            children: [
+              buildDescriptionTitles(),
+              buildRowString(
+                context,
+                onChangedValue: (value) => cubit.changeResult5(value),
+                countController: cubit.paper5Controller,
+                resultString: state.result5,
+                multiplyCount: PaperMoneyCounts.moneyCount5,
+              ),
+              buildRowString(
+                context,
+                resultString: state.result10,
+                onChangedValue: (value) => cubit.changeResult10(value),
+                countController: cubit.paper10Controller,
+                multiplyCount: PaperMoneyCounts.moneyCount10,
+              ),
+              buildRowString(
+                context,
+                resultString: state.result20,
+                onChangedValue: (value) => cubit.changeResult20(value),
+                countController: cubit.paper20Controller,
+                multiplyCount: PaperMoneyCounts.moneyCount20,
+              ),
+              buildRowString(
+                context,
+                resultString: state.result50,
+                onChangedValue: (value) => cubit.changeResult50(value),
+                countController: cubit.paper50Controller,
+                multiplyCount: PaperMoneyCounts.moneyCount50,
+              ),
+              buildRowString(
+                context,
+                resultString: state.result100,
+                onChangedValue: (value) => cubit.changeResult100(value),
+                countController: cubit.paper100Controller,
+                multiplyCount: PaperMoneyCounts.moneyCount100,
+              ),
+              buildRowString(
+                context,
+                resultString: state.result200,
+                onChangedValue: (value) => cubit.changeResult200(value),
+                countController: cubit.paper200Controller,
+                multiplyCount: PaperMoneyCounts.moneyCount200,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -129,7 +139,8 @@ class _PaperMoneyAddView extends StatelessWidget {
   ElevatedButton submitButton(BuildContext context) {
     final cubit = context.read<PaperMoneyAddCubit>();
     return ElevatedButton.icon(
-      onPressed: () => cubit.submitBox().whenComplete(() => context.pop()),
+      onPressed: () =>
+          cubit.submitBox().whenComplete(() => context.route.pop()),
       label: Padding(
         padding: context.padding.normal,
         child: Text(PaperStrings.instance.submitButtonTitle),
@@ -146,7 +157,7 @@ class _PaperMoneyAddView extends StatelessWidget {
     required void Function(String value) onChangedValue,
   }) {
     return Padding(
-      padding: context.verticalPaddingLow,
+      padding: context.padding.verticalLow,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -154,10 +165,11 @@ class _PaperMoneyAddView extends StatelessWidget {
             context,
             '$multiplyCount₺',
           ),
+          context.sized.emptySizedWidthBoxLow,
           Expanded(
-            flex: 4,
+            flex: 3,
             child: SizedBox(
-              height: context.normalValue * 3,
+              height: context.sized.normalValue * 3,
               child: buildTextFieldItemString(
                 PaperStrings.instance.moneyCountTitle,
                 onChanged: (value) => onChangedValue(
@@ -165,6 +177,7 @@ class _PaperMoneyAddView extends StatelessWidget {
               ),
             ),
           ),
+          context.sized.emptySizedWidthBoxLow,
           buildExportMoneyItem(context, resultString),
         ],
       ),
@@ -174,7 +187,7 @@ class _PaperMoneyAddView extends StatelessWidget {
   Widget buildDescriptionTitles() {
     return Builder(builder: (context) {
       return Padding(
-        padding: context.verticalPaddingLow,
+        padding: context.padding.verticalLow,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -184,11 +197,13 @@ class _PaperMoneyAddView extends StatelessWidget {
               3,
               isColor: true,
             ),
+            context.sized.emptySizedWidthBoxLow,
             descriptionTitlesItem(
               context,
               PaperStrings.instance.moneyCountTitle,
-              4,
+              3,
             ),
+            context.sized.emptySizedWidthBoxLow,
             descriptionTitlesItem(
               context,
               PaperStrings.instance.moneyResultTitle,
@@ -205,13 +220,13 @@ class _PaperMoneyAddView extends StatelessWidget {
     return Expanded(
       flex: 3,
       child: Container(
-        height: context.normalValue * 3,
-        padding: context.paddingLow,
-        margin: context.paddingLow,
+        height: context.sized.normalValue * 3,
+        padding: context.padding.low,
+        margin: context.padding.low,
         decoration: BoxDecoration(
-          borderRadius: context.lowBorderRadius,
+          borderRadius: context.border.lowBorderRadius,
           border: Border.all(
-            color: context.colorScheme.primary,
+            color: context.general.colorScheme.primary,
             width: 2,
           ),
         ),
@@ -240,8 +255,8 @@ class _PaperMoneyAddView extends StatelessWidget {
     return Expanded(
       flex: 3,
       child: Container(
-        width: context.highValue,
-        height: context.normalValue * 3,
+        width: context.sized.highValue,
+        height: context.sized.normalValue * 3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
@@ -261,14 +276,11 @@ class _PaperMoneyAddView extends StatelessWidget {
   }) {
     return Expanded(
       flex: flex,
-      child: SizedBox(
-        height: context.normalValue * 3,
-        child: Center(
-          child: Text(
-            title,
-            style: context.textTheme.titleSmall?.copyWith(
-              color: isColor ? context.colorScheme.primary : null,
-            ),
+      child: Center(
+        child: Text(
+          title,
+          style: context.general.textTheme.titleSmall?.copyWith(
+            color: isColor ? context.general.colorScheme.primary : null,
           ),
         ),
       ),

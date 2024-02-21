@@ -1,3 +1,6 @@
+import '../../../../../product/ads_banner/view/ads_view.dart';
+import '../../../../../product/drawer/view/custom_drawer_view.dart';
+
 import '../../../../../core/components/button/custom_icon_button.dart';
 import '../../../../../core/extensions/scaffold_messenger/snack_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,48 +23,77 @@ class BrokenMoneys extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CustomDrawer(),
       key: scaffoldKey,
       appBar: buildAppBar(),
-      body: ValueListenableBuilder(
-        valueListenable: Hive.box<BrokenMoneyModel>(
-          ProjectStrings.instance.brokenMoneyBoxTitle,
-        ).listenable(),
-        builder: (context, Box<BrokenMoneyModel> box, _) {
-          if (box.isEmpty) {
-            return Center(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  FontAwesomeIcons.boxOpen,
-                  size: context.sized.width * .3,
-                ),
-                context.sized.emptySizedHeightBoxLow3x,
-                Text(
-                  BrokenStrings.instance.emptyBoxMessage,
-                  style: context.general.textTheme.bodyLarge?.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ));
-          } else {
-            return Padding(
-              padding: context.padding.normal,
-              child: ListView.builder(
-                itemCount: box.values.length,
-                shrinkWrap: true,
-                reverse: true,
-                itemBuilder: (context, index) =>
-                    buildCard(context, box.getAt(index), box, index),
-              ),
-            );
-          }
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: ValueListenableBuilder(
+              valueListenable: Hive.box<BrokenMoneyModel>(
+                ProjectStrings.instance.brokenMoneyBoxTitle,
+              ).listenable(),
+              builder: (context, Box<BrokenMoneyModel> box, _) {
+                if (box.isEmpty) {
+                  return buildEmptyMessage(context);
+                } else {
+                  final list = box.values.toList().reversed.toList();
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          padding: context.padding.horizontalLow,
+                          children: List.generate(
+                            list.length,
+                            (index) =>
+                                buildCard(context, list[index], box, index),
+                          ),
+                        ),
+                      ),
+                      // ListView.builder(
+                      //   itemCount: box.values.length,
+                      //   reverse: true,
+                      //   shrinkWrap: true,
+                      //   itemBuilder: (context, index) =>
+                      //       buildCard(context, box.getAt(index), box, index),
+                      // ),
+                      const AdsBanner(),
+                    ],
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: buildNavigateButton(context),
     );
+  }
+
+  Center buildEmptyMessage(BuildContext context) {
+    return Center(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          FontAwesomeIcons.boxOpen,
+          color: context.general.colorScheme.primary,
+          size: context.sized.width * .3,
+        ),
+        context.sized.emptySizedHeightBoxLow3x,
+        Text(
+          BrokenStrings.instance.emptyBoxMessage,
+          style: context.general.textTheme.bodyLarge?.copyWith(
+            color: context.general.colorScheme.primary,
+          ),
+        ),
+      ],
+    ));
   }
 
   Card buildCard(
@@ -120,7 +152,7 @@ class BrokenMoneys extends StatelessWidget {
 
   ElevatedButton buildNavigateButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => context.navigateToPage(const BrokenMoneyAddView()),
+      onPressed: () => context.route.navigateToPage(const BrokenMoneyAddView()),
       child: Text(BrokenStrings.instance.fabTitle),
     );
   }

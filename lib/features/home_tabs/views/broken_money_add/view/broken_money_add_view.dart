@@ -9,7 +9,7 @@ import '../../../../../core/constants/strings/broken_strings.dart';
 import '../cubit/broken_money_add_cubit.dart';
 
 class BrokenMoneyAddView extends StatelessWidget {
-  const BrokenMoneyAddView({Key? key}) : super(key: key);
+  const BrokenMoneyAddView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class BrokenMoneyAddView extends StatelessWidget {
 }
 
 class _BrokenMoneyAddView extends StatelessWidget {
-  const _BrokenMoneyAddView({Key? key}) : super(key: key);
+  const _BrokenMoneyAddView();
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +29,20 @@ class _BrokenMoneyAddView extends StatelessWidget {
       key: context.read<BrokenMoneyAddCubit>().scaffoldKey,
       appBar: CustomAppBar(title: BrokenStrings.instance.screenTitle),
       body: SingleChildScrollView(
+        padding: context.padding.horizontalLow,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildCoumn(context),
-            context.emptySizedHeightBoxLow,
+            context.sized.emptySizedHeightBoxLow,
             buildTotalMoneyTitle(context),
             context.sized.emptySizedHeightBoxLow,
-            submitButton(context),
+            context.sized.emptySizedHeightBoxLow,
+            Padding(
+              padding: context.padding.horizontalNormal,
+              child: submitButton(context),
+            ),
           ],
         ),
       ),
@@ -45,17 +51,14 @@ class _BrokenMoneyAddView extends StatelessWidget {
 
   Widget buildTotalMoneyTitle(BuildContext context) {
     return Padding(
-      padding: context.horizontalPaddingLow,
+      padding: context.padding.horizontalLow,
       child: Row(
         children: [
-          Expanded(
-            flex: 3,
-            child: moneyDescriptionContainerItem(
-              context,
-              BrokenStrings.instance.totalMoneyTitle,
-            ),
+          moneyDescriptionContainerItem(
+            context,
+            BrokenStrings.instance.totalMoneyTitle,
           ),
-          context.emptySizedWidthBoxNormal,
+          context.sized.emptySizedWidthBoxNormal,
           Expanded(
             flex: 3,
             child: Center(
@@ -63,7 +66,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
                 builder: (context, state) {
                   return Text(
                     '${state.totalMoney}₺',
-                    style: context.textTheme.bodyLarge,
+                    style: context.general.textTheme.bodyLarge,
                   );
                 },
               ),
@@ -79,60 +82,58 @@ class _BrokenMoneyAddView extends StatelessWidget {
     final cubit = context.read<BrokenMoneyAddCubit>();
     return BlocBuilder<BrokenMoneyAddCubit, BrokenMoneyAddState>(
       builder: (context, state) {
-        return Column(
-          children: [
-            buildDescriptionTitles(),
-            buildRow(
-              context,
-              countController: cubit.count1Controller,
-              divideGram: MoneyGrams.money1Grams,
-              gramController: cubit.gram1Controller,
-              multiplyCount: BrokenMoneyCounts.moneyCount1,
-              // resultController: cubit.resultMoney1,
-              resultValue: state.resultMoney1,
-              onChangedValue: (value) => cubit.changeResultMoney1(value),
-            ),
-            buildRow(
-              context,
-              countController: cubit.count050Controller,
-              divideGram: MoneyGrams.money050Grams,
-              gramController: cubit.gram050Controller,
-              multiplyCount: BrokenMoneyCounts.moneyCount050,
-              // resultController: cubit.resultMoney050,
-              resultValue: state.resultMoney050,
-              onChangedValue: (value) => cubit.changeResultMoney050(value),
-            ),
-            buildRow(
-              context,
-              countController: cubit.count025Controller,
-              divideGram: MoneyGrams.money025Grams,
-              gramController: cubit.gram025Controller,
-              multiplyCount: BrokenMoneyCounts.moneyCount025,
-              // resultController: cubit.resultMoney025,
-              resultValue: state.resultMoney025,
-              onChangedValue: (value) => cubit.changeResultMoney025(value),
-            ),
-            buildRow(
-              context,
-              countController: cubit.count010Controller,
-              divideGram: MoneyGrams.money010Grams,
-              gramController: cubit.gram010Controller,
-              multiplyCount: BrokenMoneyCounts.moneyCount010,
-              // resultController: cubit.resultMoney010,
-              resultValue: state.resultMoney010,
-              onChangedValue: (value) => cubit.changeResultMoney010(value),
-            ),
-            buildRow(
-              context,
-              countController: cubit.count005Controller,
-              divideGram: MoneyGrams.money005Grams,
-              gramController: cubit.gram005Controller,
-              multiplyCount: BrokenMoneyCounts.moneyCount005,
-              // resultController: cubit.resultMoney005,
-              resultValue: state.resultMoney005,
-              onChangedValue: (value) => cubit.changeResultMoney005(value),
-            ),
-          ],
+        return Padding(
+          padding: context.padding.verticalLow,
+          child: Column(
+            children: [
+              buildDescriptionTitles(),
+              buildRow(
+                context,
+                countController: cubit.count1Controller,
+                divideGram: MoneyGrams.money1Grams,
+                gramController: cubit.gram1Controller,
+                multiplyCount: BrokenMoneyCounts.moneyCount1,
+                resultValue: state.resultMoney1,
+                onChangedValue: (value) => cubit.changeResultMoney1(value),
+              ),
+              buildRow(
+                context,
+                countController: cubit.count050Controller,
+                divideGram: MoneyGrams.money050Grams,
+                gramController: cubit.gram050Controller,
+                multiplyCount: BrokenMoneyCounts.moneyCount050,
+                resultValue: state.resultMoney050,
+                onChangedValue: (value) => cubit.changeResultMoney050(value),
+              ),
+              buildRow(
+                context,
+                countController: cubit.count025Controller,
+                divideGram: MoneyGrams.money025Grams,
+                gramController: cubit.gram025Controller,
+                multiplyCount: BrokenMoneyCounts.moneyCount025,
+                resultValue: state.resultMoney025,
+                onChangedValue: (value) => cubit.changeResultMoney025(value),
+              ),
+              buildRow(
+                context,
+                countController: cubit.count010Controller,
+                divideGram: MoneyGrams.money010Grams,
+                gramController: cubit.gram010Controller,
+                multiplyCount: BrokenMoneyCounts.moneyCount010,
+                resultValue: state.resultMoney010,
+                onChangedValue: (value) => cubit.changeResultMoney010(value),
+              ),
+              buildRow(
+                context,
+                countController: cubit.count005Controller,
+                divideGram: MoneyGrams.money005Grams,
+                gramController: cubit.gram005Controller,
+                multiplyCount: BrokenMoneyCounts.moneyCount005,
+                resultValue: state.resultMoney005,
+                onChangedValue: (value) => cubit.changeResultMoney005(value),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -143,7 +144,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
       onPressed: () => context
           .read<BrokenMoneyAddCubit>()
           .submitBox()
-          .whenComplete(() => context.pop()),
+          .whenComplete(() => context.route.pop()),
       label: Padding(
         padding: context.padding.normal,
         child: Text(BrokenStrings.instance.submitButtonTitle),
@@ -163,7 +164,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
   }) {
     final cubit = context.read<BrokenMoneyAddCubit>();
     return Padding(
-      padding: context.verticalPaddingLow,
+      padding: context.padding.verticalLow,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -171,45 +172,54 @@ class _BrokenMoneyAddView extends StatelessWidget {
             context,
             '${multiplyCount.toDouble()} ₺',
           ),
-          SizedBox(
-            width: context.width / 4,
-            height: context.normalValue * 3,
-            child: buildTextFieldItem(
-              BrokenStrings.instance.moneyGramTitle,
-              controller: gramController,
-              onChanged: (value) {
-                cubit.gramToCount(
-                  stringGram: value,
-                  bolunecekGram: divideGram,
-                  countController: countController,
-                  carpilacakMoney: multiplyCount,
-                  // resultController: resultController,
-                );
-                onChangedValue(((double.tryParse(countController.text) ?? 0) *
-                        multiplyCount)
-                    .toStringAsFixed(2));
-              },
+          context.sized.emptySizedWidthBoxLow,
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              // width: context.sized.width / 4,
+              height: context.sized.normalValue * 3,
+              child: buildTextFieldItem(
+                BrokenStrings.instance.moneyGramTitle,
+                controller: gramController,
+                onChanged: (value) {
+                  cubit.gramToCount(
+                    stringGram: value,
+                    bolunecekGram: divideGram,
+                    countController: countController,
+                    carpilacakMoney: multiplyCount,
+                    // resultController: resultController,
+                  );
+                  onChangedValue(((double.tryParse(countController.text) ?? 0) *
+                          multiplyCount)
+                      .toStringAsFixed(2));
+                },
+              ),
             ),
           ),
-          SizedBox(
-            width: context.width / 4,
-            height: context.normalValue * 3,
-            child: buildTextFieldItem(
-              BrokenStrings.instance.moneyCountTitle,
-              controller: countController,
-              onChanged: (String value) {
-                cubit.countToGram(
-                  // resultController: resultController,
-                  carpilacakGram: divideGram,
-                  carpilacakMoney: multiplyCount,
-                  gramController: gramController,
-                  stringCount: value,
-                );
-                onChangedValue(((double.tryParse(value) ?? 0) * multiplyCount)
-                    .toStringAsFixed(2));
-              },
+          context.sized.emptySizedWidthBoxLow,
+          Expanded(
+            flex: 3,
+            child: SizedBox(
+              // width: context.sized.width / 4,
+              height: context.sized.normalValue * 3,
+              child: buildTextFieldItem(
+                BrokenStrings.instance.moneyCountTitle,
+                controller: countController,
+                onChanged: (String value) {
+                  cubit.countToGram(
+                    // resultController: resultController,
+                    carpilacakGram: divideGram,
+                    carpilacakMoney: multiplyCount,
+                    gramController: gramController,
+                    stringCount: value,
+                  );
+                  onChangedValue(((double.tryParse(value) ?? 0) * multiplyCount)
+                      .toStringAsFixed(2));
+                },
+              ),
             ),
           ),
+          context.sized.emptySizedWidthBoxLow,
           buildExportMoneyItem(context, resultValue),
         ],
       ),
@@ -218,52 +228,50 @@ class _BrokenMoneyAddView extends StatelessWidget {
 
   Widget buildDescriptionTitles() {
     return Builder(builder: (context) {
-      return Padding(
-        padding: context.verticalPaddingLow,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            descriptionTitlesItem(
-              context,
-              BrokenStrings.instance.moneyCategoryTitle,
-              context.highValue,
-              isColor: true,
-            ),
-            descriptionTitlesItem(
-              context,
-              BrokenStrings.instance.moneyGramTitle,
-              context.highValue * 1.5,
-            ),
-            descriptionTitlesItem(
-              context,
-              BrokenStrings.instance.moneyCountTitle,
-              context.highValue * 1.5,
-            ),
-            descriptionTitlesItem(
-              context,
-              BrokenStrings.instance.moneyResultTitle,
-              context.highValue,
-              isColor: true,
-            ),
-          ],
-        ),
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          descriptionTitlesItem(
+            context,
+            BrokenStrings.instance.moneyCategoryTitle,
+            isColor: true,
+          ),
+          context.sized.emptySizedWidthBoxLow,
+          descriptionTitlesItem(
+            context,
+            BrokenStrings.instance.moneyGramTitle,
+          ),
+          context.sized.emptySizedWidthBoxLow,
+          descriptionTitlesItem(
+            context,
+            BrokenStrings.instance.moneyCountTitle,
+          ),
+          context.sized.emptySizedWidthBoxLow,
+          descriptionTitlesItem(
+            context,
+            BrokenStrings.instance.moneyResultTitle,
+            isColor: true,
+          ),
+        ],
       );
     });
   }
 
-  Container moneyDescriptionContainerItem(BuildContext context, String title) {
-    return Container(
-      width: context.width / 5,
-      height: context.normalValue * 3,
-      padding: context.paddingLow,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: context.colorScheme.primary,
-          width: 2,
+  Widget moneyDescriptionContainerItem(BuildContext context, String title) {
+    return Expanded(
+      flex: 3,
+      child: Container(
+        height: context.sized.normalValue * 3,
+        padding: context.padding.low,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: context.general.colorScheme.primary,
+            width: 2,
+          ),
         ),
+        child: Center(child: Text(title)),
       ),
-      child: Center(child: Text(title)),
     );
   }
 
@@ -285,30 +293,32 @@ class _BrokenMoneyAddView extends StatelessWidget {
     );
   }
 
-  Container buildExportMoneyItem(BuildContext context, String money) {
-    return Container(
-      width: context.width / 5,
-      height: context.normalValue * 3,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Theme.of(context).primaryColor,
+  Widget buildExportMoneyItem(BuildContext context, String money) {
+    return Expanded(
+      flex: 3,
+      child: Container(
+        width: context.sized.highValue,
+        height: context.sized.normalValue * 3,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
+        child: Center(child: Text('$money ₺')),
       ),
-      child: Center(child: Text('$money ₺')),
     );
   }
 
-  Widget descriptionTitlesItem(BuildContext context, String title, double width,
+  Widget descriptionTitlesItem(BuildContext context, String title,
       {bool isColor = false}) {
-    return SizedBox(
-      width: context.width / 4,
-      height: context.normalValue * 3,
+    return Expanded(
+      flex: 3,
       child: Center(
         child: Text(
           title,
-          style: context.textTheme.titleSmall?.copyWith(
-            color: isColor ? context.colorScheme.primary : null,
+          style: context.general.textTheme.titleSmall?.copyWith(
+            color: isColor ? context.general.colorScheme.primary : null,
           ),
         ),
       ),

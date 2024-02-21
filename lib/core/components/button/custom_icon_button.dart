@@ -9,25 +9,25 @@ class CustomIconButton extends StatelessWidget {
   final String? toolTip;
   final EdgeInsets? padding;
   const CustomIconButton({
-    Key? key,
+    super.key,
     required this.iconData,
     required this.onTap,
     this.color,
     this.size,
     this.toolTip,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: context.lowBorderRadius,
+      borderRadius: context.border.lowBorderRadius,
       splashColor: color?.withOpacity(.6),
       onTap: onTap,
       child: Tooltip(
         message: toolTip ?? '',
         child: Padding(
-          padding: padding ?? context.paddingLow,
+          padding: padding ?? context.padding.low,
           child: Icon(
             iconData,
             size: size,

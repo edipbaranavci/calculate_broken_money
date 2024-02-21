@@ -19,12 +19,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title, style: context.textTheme.titleLarge),
+      title: Text(title, style: context.general.textTheme.titleLarge),
       centerTitle: true,
       leading: Center(
         child: CustomIconButton(
           iconData: Icons.chevron_left,
-          onTap: onBackTap ?? () => context.pop(),
+          color: context.general.colorScheme.primary,
+          onTap: onBackTap ?? () => context.route.pop(),
           toolTip: 'Geri',
         ),
       ),

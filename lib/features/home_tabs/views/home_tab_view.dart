@@ -8,7 +8,7 @@ import 'broken_moneys/view/broken_moneys_view.dart';
 import 'paper_moneys/view/paper_moneys_view.dart';
 
 class HomeTabsView extends StatefulWidget {
-  const HomeTabsView({Key? key}) : super(key: key);
+  const HomeTabsView({super.key});
 
   @override
   State<HomeTabsView> createState() => _HomeTabsViewState();
@@ -26,7 +26,7 @@ class _HomeTabsViewState extends State<HomeTabsView>
 }
 
 class _HomeTabsView extends StatelessWidget {
-  const _HomeTabsView({Key? key}) : super(key: key);
+  const _HomeTabsView();
   final String calculateBrokenMoneyTitle = 'Bozuk Para';
   final String calculatePaperMoneyTitle = 'Kağıt Para';
   @override
@@ -38,7 +38,7 @@ class _HomeTabsView extends StatelessWidget {
         children: [BrokenMoneys(), PaperMoneys()],
       ),
       bottomNavigationBar: TabBar(
-        dividerColor: context.appTheme.primaryColor,
+        dividerColor: context.general.appTheme.primaryColor,
         controller: cubit.tabController,
         tabs: [
           Tab(

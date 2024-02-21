@@ -83,7 +83,7 @@ extension SnackBarExtension on GlobalKey<ScaffoldState> {
   Text buildMessage(BuildContext? context, String message, Color? textColor) {
     return Text(
       message,
-      style: context?.textTheme.bodyMedium?.copyWith(
+      style: context?.general.textTheme.bodyMedium?.copyWith(
         color: textColor ?? Colors.white,
       ),
     );

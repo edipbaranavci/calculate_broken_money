@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
-import 'package:kartal/kartal.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'core/constants/strings/project_strings.dart';
 import 'core/models/broken_money_model.dart';
 import 'core/models/paper_money_model.dart';
+import 'cubit/main_cubit.dart';
 import 'features/home_tabs/views/home_tab_view.dart';
 
 Future<void> initialize() async {
-  Intl.defaultLocale = 'tr';
-  initializeDateFormatting('tr');
   await Hive.initFlutter();
   Hive
     ..registerAdapter(BrokenMoneyModelAdapter())
@@ -21,9 +20,6 @@ Future<void> initialize() async {
       ProjectStrings.instance.brokenMoneyBoxTitle);
   await Hive.openBox<PaperMoneyModel>(
       ProjectStrings.instance.paperMoneyBoxTitle);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(statusBarColor: Colors.deepPurple),
-  );
 }
 
 Future<void> main() async {
@@ -32,26 +28,66 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: ProjectStrings.instance.appTitle,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.purple,
-        brightness: Brightness.dark,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: context.border.lowBorderRadius * 0.5,
+    return BlocProvider<MainCubit>(
+      create: (context) => MainCubit(),
+      child: const _MyApp(),
+    );
+  }
+}
+
+class _MyApp extends StatelessWidget {
+  const _MyApp();
+
+  @override
+  Widget build(BuildContext context) {
+    Upgrader.clearSavedSettings();
+    return BlocBuilder<MainCubit, MainState>(
+      builder: (context, state) {
+        final color =
+            state.color != null ? state.color as MaterialColor : Colors.purple;
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(statusBarColor: state.color),
+        );
+        return MaterialApp(
+          title: ProjectStrings.instance.appTitle,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('tr', 'TR')],
+          scaffoldMessengerKey: context.read<MainCubit>().scaffoldKey,
+          debugShowCheckedModeBanner: false,
+          theme: (state.isDarkMode == true)
+              ? ThemeData.dark(useMaterial3: true)
+              : ThemeData(
+                  useMaterial3: true,
+                  primarySwatch: color,
+                  primaryColor: color,
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: state.color ?? Colors.purple,
+                  ),
+                  brightness: state.isDarkMode == true
+                      ? Brightness.dark
+                      : Brightness.light,
+                ),
+          home: BlocProvider.value(
+            value: context.read<MainCubit>(),
+            child: UpgradeAlert(
+              showIgnore: false,
+              dialogStyle: UpgradeDialogStyle.cupertino,
+              showLater: true,
+              showReleaseNotes: true,
+              canDismissDialog: true,
+              child: const HomeTabsView(),
             ),
           ),
-        ),
-      ),
-      home: const HomeTabsView(),
+        );
+      },
     );
   }
 }
