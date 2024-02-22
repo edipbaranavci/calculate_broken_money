@@ -1,19 +1,19 @@
-import '../../../../../product/ads_banner/view/ads_view.dart';
-import '../../../../../product/drawer/view/custom_drawer_view.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:kartal/kartal.dart';
 
 import '../../../../../core/components/button/custom_icon_button.dart';
-import '../../../../../core/extensions/scaffold_messenger/snack_bar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../../../../core/constants/money_counts.dart';
 import '../../../../../core/constants/money_grams.dart';
 import '../../../../../core/constants/strings/broken_strings.dart';
 import '../../../../../core/constants/strings/project_strings.dart';
+import '../../../../../core/extensions/scaffold_messenger/snack_bar.dart';
 import '../../../../../core/models/broken_money_model.dart';
+import '../../../../../product/ads_banner/view/ads_view.dart';
+import '../../../../../product/drawer/view/custom_drawer_view.dart';
 import '../../broken_money_add/view/broken_money_add_view.dart';
-import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kartal/kartal.dart';
 
 class BrokenMoneys extends StatelessWidget {
   BrokenMoneys({super.key});
@@ -49,18 +49,16 @@ class BrokenMoneys extends StatelessWidget {
                           padding: context.padding.horizontalLow,
                           children: List.generate(
                             list.length,
-                            (index) =>
-                                buildCard(context, list[index], box, index),
+                            (index) => buildCard(
+                              context,
+                              list[index],
+                              box,
+                              index,
+                              (list.length - 1 - index),
+                            ),
                           ),
                         ),
                       ),
-                      // ListView.builder(
-                      //   itemCount: box.values.length,
-                      //   reverse: true,
-                      //   shrinkWrap: true,
-                      //   itemBuilder: (context, index) =>
-                      //       buildCard(context, box.getAt(index), box, index),
-                      // ),
                       const AdsBanner(),
                     ],
                   );
@@ -101,6 +99,7 @@ class BrokenMoneys extends StatelessWidget {
     BrokenMoneyModel? model,
     Box<BrokenMoneyModel> box,
     int index,
+    int reversedIndex,
   ) {
     return Card(
       shape: RoundedRectangleBorder(
@@ -113,7 +112,7 @@ class BrokenMoneys extends StatelessWidget {
         ),
         title: buildDateTitle(context, model),
         children: [
-          buildDateAndDeleteTitle(context, model, box, index),
+          buildDateAndDeleteTitle(context, model, box, reversedIndex),
           buildDescriptionTitles(),
           buildRow(
             context,
@@ -161,15 +160,18 @@ class BrokenMoneys extends StatelessWidget {
     BuildContext context,
     BrokenMoneyModel? model,
     Box<BrokenMoneyModel> box,
-    int index,
+    int deletedIndex,
   ) {
     return ListTile(
       title: buildDateTitle(context, model),
       trailing: CustomIconButton(
         iconData: Icons.delete,
+        color: context.general.colorScheme.primary,
         onTap: () {
-          box.deleteAt(index).whenComplete(() {
-            scaffoldKey.showGreatSnackBar('Hesaplama Silindi!');
+          box.deleteAt(deletedIndex).whenComplete(() {
+            scaffoldKey.showGreatSnackBar(
+              'Hesaplama Silindi | ${formatAmount(model?.totalMoney ?? 0)}₺',
+            );
           });
         },
         toolTip: BrokenStrings.instance.deleteButtomTitle,
@@ -180,8 +182,18 @@ class BrokenMoneys extends StatelessWidget {
   Padding buildDateTitle(BuildContext context, BrokenMoneyModel? model) {
     return Padding(
       padding: context.padding.verticalLow,
-      child: Text(
-        '${model?.date ?? ''} - ${BrokenStrings.instance.totalTitle}: ${model?.totalMoney ?? 0}₺',
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: '${model?.date ?? ''}\n'),
+            TextSpan(
+              text: '${formatAmount(model?.totalMoney ?? 0)}₺',
+              style: context.general.textTheme.bodyLarge?.copyWith(
+                color: context.general.colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -283,4 +295,7 @@ class BrokenMoneys extends StatelessWidget {
       );
     });
   }
+
+  String formatAmount(double price) =>
+      NumberFormat("#,##0.00", "tr_TR").format(price);
 }

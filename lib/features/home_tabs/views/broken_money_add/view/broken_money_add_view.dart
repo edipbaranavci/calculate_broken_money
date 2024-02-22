@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kartal/kartal.dart';
 
 import '../../../../../core/components/app_bar/custom_app_bar.dart';
@@ -34,11 +35,13 @@ class _BrokenMoneyAddView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            buildCoumn(context),
+            Padding(
+              padding: context.padding.horizontalLow,
+              child: buildCoumn(context),
+            ),
             context.sized.emptySizedHeightBoxLow,
             buildTotalMoneyTitle(context),
-            context.sized.emptySizedHeightBoxLow,
-            context.sized.emptySizedHeightBoxLow,
+            context.sized.emptySizedHeightBoxLow3x,
             Padding(
               padding: context.padding.horizontalNormal,
               child: submitButton(context),
@@ -65,7 +68,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
               child: BlocBuilder<BrokenMoneyAddCubit, BrokenMoneyAddState>(
                 builder: (context, state) {
                   return Text(
-                    '${state.totalMoney}₺',
+                    '${formatAmount(double.parse(state.totalMoney))}₺',
                     style: context.general.textTheme.bodyLarge,
                   );
                 },
@@ -87,6 +90,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
           child: Column(
             children: [
               buildDescriptionTitles(),
+              context.sized.emptySizedHeightBoxLow,
               buildRow(
                 context,
                 countController: cubit.count1Controller,
@@ -96,6 +100,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
                 resultValue: state.resultMoney1,
                 onChangedValue: (value) => cubit.changeResultMoney1(value),
               ),
+              context.sized.emptySizedHeightBoxLow,
               buildRow(
                 context,
                 countController: cubit.count050Controller,
@@ -105,6 +110,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
                 resultValue: state.resultMoney050,
                 onChangedValue: (value) => cubit.changeResultMoney050(value),
               ),
+              context.sized.emptySizedHeightBoxLow,
               buildRow(
                 context,
                 countController: cubit.count025Controller,
@@ -114,6 +120,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
                 resultValue: state.resultMoney025,
                 onChangedValue: (value) => cubit.changeResultMoney025(value),
               ),
+              context.sized.emptySizedHeightBoxLow,
               buildRow(
                 context,
                 countController: cubit.count010Controller,
@@ -123,6 +130,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
                 resultValue: state.resultMoney010,
                 onChangedValue: (value) => cubit.changeResultMoney010(value),
               ),
+              context.sized.emptySizedHeightBoxLow,
               buildRow(
                 context,
                 countController: cubit.count005Controller,
@@ -176,7 +184,6 @@ class _BrokenMoneyAddView extends StatelessWidget {
           Expanded(
             flex: 3,
             child: SizedBox(
-              // width: context.sized.width / 4,
               height: context.sized.normalValue * 3,
               child: buildTextFieldItem(
                 BrokenStrings.instance.moneyGramTitle,
@@ -324,4 +331,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
       ),
     );
   }
+
+  String formatAmount(double price) =>
+      NumberFormat("#,##0.00", "tr_TR").format(price);
 }

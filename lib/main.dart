@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 import 'core/constants/strings/project_strings.dart';
@@ -60,7 +60,6 @@ class _MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: const [Locale('tr', 'TR')],
-          scaffoldMessengerKey: context.read<MainCubit>().scaffoldKey,
           debugShowCheckedModeBanner: false,
           theme: (state.isDarkMode == true)
               ? ThemeData.dark(useMaterial3: true)

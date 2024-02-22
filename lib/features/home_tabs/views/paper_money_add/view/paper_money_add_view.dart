@@ -2,6 +2,7 @@ import '../../../../../core/components/app_bar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kartal/kartal.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/money_counts.dart';
 import '../../../../../core/constants/strings/paper_strings.dart';
@@ -65,7 +66,7 @@ class _PaperMoneyAddView extends StatelessWidget {
               child: BlocBuilder<PaperMoneyAddCubit, PaperMoneyAddState>(
                 builder: (context, state) {
                   return Text(
-                    '${state.totalMoney}₺',
+                    '${formatAmount(int.parse(state.totalMoney))}₺',
                     style: context.general.textTheme.bodyLarge,
                   );
                 },
@@ -286,4 +287,7 @@ class _PaperMoneyAddView extends StatelessWidget {
       ),
     );
   }
+
+  String formatAmount(int price) =>
+      NumberFormat("#,##0", "tr_TR").format(price);
 }

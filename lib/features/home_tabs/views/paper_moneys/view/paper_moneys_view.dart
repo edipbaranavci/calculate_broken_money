@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kartal/kartal.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../core/components/button/custom_icon_button.dart';
 import '../../../../../core/constants/money_counts.dart';
@@ -44,17 +45,11 @@ class PaperMoneys extends StatelessWidget {
                     padding: context.padding.horizontalLow,
                     children: List.generate(
                       list.length,
-                      (index) => buildCard(context, list[index], box, index),
+                      (index) => buildCard(context, list[index], box, index,
+                          (list.length - 1 - index)),
                     ),
                   ),
                 ),
-                // ListView.builder(
-                //   itemCount: box.values.length,
-                //   reverse: true,
-                //   shrinkWrap: true,
-                //   itemBuilder: (context, index) =>
-                //       buildCard(context, box.getAt(index), box, index),
-                // ),
                 const AdsBanner(),
               ],
             );
@@ -87,8 +82,13 @@ class PaperMoneys extends StatelessWidget {
     ));
   }
 
-  Card buildCard(BuildContext context, PaperMoneyModel? model,
-      Box<PaperMoneyModel> box, int index) {
+  Card buildCard(
+    BuildContext context,
+    PaperMoneyModel? model,
+    Box<PaperMoneyModel> box,
+    int index,
+    int reversedIndex,
+  ) {
     return Card(
       child: ExpansionTile(
         shape: RoundedRectangleBorder(
@@ -97,7 +97,7 @@ class PaperMoneys extends StatelessWidget {
         childrenPadding: context.padding.low,
         title: buildDateTitle(context, model),
         children: [
-          buildDateAndDeleteTitle(context, model, box, index),
+          buildDateAndDeleteTitle(context, model, box, reversedIndex),
           buildDescriptionTitles(),
           buildRow(
             context,
@@ -167,8 +167,12 @@ class PaperMoneys extends StatelessWidget {
     );
   }
 
-  Widget buildDateAndDeleteTitle(BuildContext context, PaperMoneyModel? model,
-      Box<PaperMoneyModel> box, int index) {
+  Widget buildDateAndDeleteTitle(
+    BuildContext context,
+    PaperMoneyModel? model,
+    Box<PaperMoneyModel> box,
+    int deletedIndex,
+  ) {
     return ListTile(
       title: buildDateTitle(context, model),
       trailing: CustomIconButton(
@@ -176,8 +180,10 @@ class PaperMoneys extends StatelessWidget {
         color: context.general.colorScheme.primary,
         toolTip: PaperStrings.instance.deleteButtomTitle,
         onTap: () {
-          box.deleteAt(index).whenComplete(() {
-            scaffoldKey.showGreatSnackBar('Hesaplama Silindi!');
+          box.deleteAt(deletedIndex).whenComplete(() {
+            scaffoldKey.showGreatSnackBar(
+              'Hesaplama Silindi | ${formatAmount(model?.totalMoney ?? 0)}₺',
+            );
           });
         },
       ),
@@ -187,8 +193,19 @@ class PaperMoneys extends StatelessWidget {
   Padding buildDateTitle(BuildContext context, PaperMoneyModel? model) {
     return Padding(
       padding: context.padding.verticalLow,
-      child: Text(
-          '${model?.date ?? ''} - ${PaperStrings.instance.totalTitle}: ${model?.totalMoney ?? 0}₺'),
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: '${model?.date ?? ''}\n'),
+            TextSpan(
+              text: '${formatAmount(model?.totalMoney ?? 0)}₺',
+              style: context.general.textTheme.bodyLarge?.copyWith(
+                color: context.general.colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -263,4 +280,7 @@ class PaperMoneys extends StatelessWidget {
       child: Center(child: Text(title, maxLines: 1)),
     );
   }
+
+  String formatAmount(int price) =>
+      NumberFormat("#,##0", "tr_TR").format(price);
 }

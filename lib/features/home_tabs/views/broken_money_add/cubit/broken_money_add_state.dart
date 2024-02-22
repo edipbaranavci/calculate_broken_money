@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'broken_money_add_cubit.dart';
 
 class BrokenMoneyAddState extends Equatable {
