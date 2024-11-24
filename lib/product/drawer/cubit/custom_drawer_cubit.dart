@@ -6,11 +6,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 part 'custom_drawer_state.dart';
 
 class CustomDrawerCubit extends Cubit<CustomDrawerState> {
-  CustomDrawerCubit() : super(CustomDrawerInitial()) {
+  CustomDrawerCubit(this.isDarkMode)
+      : super(CustomDrawerState(isDarkMode: isDarkMode)) {
     _init();
   }
 
   final _constants = ColorConstants.instance;
+
+  final bool isDarkMode;
 
   Future<void> _init() async {
     try {

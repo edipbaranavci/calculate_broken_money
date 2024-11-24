@@ -216,6 +216,9 @@ class BrokenMoneys extends StatelessWidget {
   }) {
     final count = money / multiplyCount;
     final gram = count * divideGram;
+    if (money == 0) {
+      return const SizedBox.shrink();
+    }
     return Padding(
       padding: context.padding.verticalLow,
       child: Row(

@@ -137,7 +137,7 @@ class PaperMoneys extends StatelessWidget {
             context,
             multiplyCount: PaperMoneyCounts.moneyCount200,
             money: model?.papaperMoney200 ?? 0,
-          ),
+          )
         ],
       ),
     );
@@ -149,6 +149,9 @@ class PaperMoneys extends StatelessWidget {
     required int money,
   }) {
     final count = money ~/ multiplyCount;
+    if (money == 0) {
+      return const SizedBox.shrink();
+    }
     return Padding(
       padding: context.padding.verticalLow,
       child: Row(

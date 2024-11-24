@@ -47,6 +47,7 @@ class _PaperMoneyAddView extends StatelessWidget {
             padding: context.padding.horizontalMedium,
             child: submitButton(context),
           ),
+          context.sized.emptySizedHeightBoxLow3x,
         ],
       ),
     );

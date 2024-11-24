@@ -13,7 +13,8 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CustomDrawerCubit>(
-      create: (context) => CustomDrawerCubit(),
+      create: (context) =>
+          CustomDrawerCubit(context.read<MainCubit>().state.isDarkMode),
       child: const _CustomDrawer(),
     );
   }
@@ -104,7 +105,7 @@ class _CustomDrawer extends StatelessWidget {
         final cubit = context.read<CustomDrawerCubit>();
         return Card(
           child: SwitchListTile(
-            value: state.isDarkMode ?? false,
+            value: state.isDarkMode,
             onChanged: (value) async {
               await cubit.setDarkMode(value);
               await mainCubit.getColorSettings();
