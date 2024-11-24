@@ -1,3 +1,4 @@
+import '../../../../../core/components/button/custom_elevated_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -25,7 +26,16 @@ class BrokenMoneys extends StatelessWidget {
     return Scaffold(
       drawer: const CustomDrawer(),
       key: scaffoldKey,
-      appBar: buildAppBar(),
+      appBar: AppBar(
+        title: Text(
+          BrokenStrings.instance.pageTitle,
+          style: context.general.textTheme.titleLarge?.copyWith(
+            color: context.general.colorScheme.onPrimary,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: context.general.colorScheme.primary,
+      ),
       body: Column(
         children: [
           Expanded(
@@ -149,10 +159,10 @@ class BrokenMoneys extends StatelessWidget {
     );
   }
 
-  ElevatedButton buildNavigateButton(BuildContext context) {
-    return ElevatedButton(
+  Widget buildNavigateButton(BuildContext context) {
+    return CustomElevatedTextButton(
       onPressed: () => context.route.navigateToPage(const BrokenMoneyAddView()),
-      child: Text(BrokenStrings.instance.fabTitle),
+      title: BrokenStrings.instance.fabTitle,
     );
   }
 
@@ -219,9 +229,6 @@ class BrokenMoneys extends StatelessWidget {
       ),
     );
   }
-
-  AppBar buildAppBar() =>
-      AppBar(title: Text(BrokenStrings.instance.pageTitle), centerTitle: true);
 
   Widget descriptionTitlesItem(BuildContext context, String title, double width,
       {bool isColor = false}) {

@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kartal/kartal.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../core/components/button/custom_elevated_text_button.dart';
 import '../../../../../core/components/button/custom_icon_button.dart';
 import '../../../../../core/constants/money_counts.dart';
 import '../../../../../core/constants/strings/paper_strings.dart';
@@ -24,7 +25,15 @@ class PaperMoneys extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       drawer: const CustomDrawer(),
-      appBar: buildAppBar(),
+      appBar: AppBar(
+        backgroundColor: context.general.colorScheme.primary,
+        title: Text(
+          PaperStrings.instance.pageTitle,
+          style: context.general.textTheme.titleLarge?.copyWith(
+            color: context.general.colorScheme.onPrimary,
+          ),
+        ),
+      ),
       body: ValueListenableBuilder(
         valueListenable: Hive.box<PaperMoneyModel>(
           ProjectStrings.instance.paperMoneyBoxTitle,
@@ -236,13 +245,10 @@ class PaperMoneys extends StatelessWidget {
     });
   }
 
-  AppBar buildAppBar() =>
-      AppBar(title: Text(PaperStrings.instance.pageTitle), centerTitle: true);
-
-  ElevatedButton buildNavigateButton(BuildContext context) {
-    return ElevatedButton(
+  Widget buildNavigateButton(BuildContext context) {
+    return CustomElevatedTextButton(
       onPressed: () => context.route.navigateToPage(const PaperMoneyAddView()),
-      child: Text(PaperStrings.instance.fabTitle),
+      title: PaperStrings.instance.fabTitle,
     );
   }
 

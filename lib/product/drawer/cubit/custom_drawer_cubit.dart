@@ -27,7 +27,7 @@ class CustomDrawerCubit extends Cubit<CustomDrawerState> {
   Future<void> setColor(int index) async {
     final box = await Hive.openBox(_constants.colorConstantsKey);
     await box.put(_constants.colorConstantsKey, index);
-    await setDarkMode(false);
+    // await setDarkMode(false);
     await _init();
   }
 

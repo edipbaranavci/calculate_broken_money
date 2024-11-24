@@ -7,6 +7,7 @@ import '../../../../../core/components/app_bar/custom_app_bar.dart';
 import '../../../../../core/constants/money_counts.dart';
 import '../../../../../core/constants/money_grams.dart';
 import '../../../../../core/constants/strings/broken_strings.dart';
+import '../../../../../product/button/save_button.dart';
 import '../cubit/broken_money_add_cubit.dart';
 
 class BrokenMoneyAddView extends StatelessWidget {
@@ -43,7 +44,7 @@ class _BrokenMoneyAddView extends StatelessWidget {
             buildTotalMoneyTitle(context),
             context.sized.emptySizedHeightBoxLow3x,
             Padding(
-              padding: context.padding.horizontalNormal,
+              padding: context.padding.horizontalMedium,
               child: submitButton(context),
             ),
           ],
@@ -147,17 +148,12 @@ class _BrokenMoneyAddView extends StatelessWidget {
     );
   }
 
-  ElevatedButton submitButton(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: () => context
-          .read<BrokenMoneyAddCubit>()
-          .submitBox()
-          .whenComplete(() => context.route.pop()),
-      label: Padding(
-        padding: context.padding.normal,
-        child: Text(BrokenStrings.instance.submitButtonTitle),
-      ),
-      icon: const Icon(Icons.save),
+  Widget submitButton(BuildContext context) {
+    final cubit = context.read<BrokenMoneyAddCubit>();
+    return SaveButton(
+      onPressed: () =>
+          cubit.submitBox().whenComplete(() => context.route.pop()),
+      title: BrokenStrings.instance.submitButtonTitle,
     );
   }
 

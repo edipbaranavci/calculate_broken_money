@@ -62,7 +62,15 @@ class _MyApp extends StatelessWidget {
           supportedLocales: const [Locale('tr', 'TR')],
           debugShowCheckedModeBanner: false,
           theme: (state.isDarkMode == true)
-              ? ThemeData.dark(useMaterial3: true)
+              ? ThemeData.dark(useMaterial3: true).copyWith(
+                  primaryColor: color,
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: state.color ?? Colors.purple,
+                  ),
+                  brightness: state.isDarkMode == true
+                      ? Brightness.dark
+                      : Brightness.light,
+                )
               : ThemeData(
                   useMaterial3: true,
                   primarySwatch: color,
@@ -81,8 +89,8 @@ class _MyApp extends StatelessWidget {
               dialogStyle: UpgradeDialogStyle.cupertino,
               showLater: true,
               showReleaseNotes: true,
-              canDismissDialog: true,
-              child: const HomeTabsView(),
+              barrierDismissible: true,
+              child: const SafeArea(child: HomeTabsView()),
             ),
           ),
         );

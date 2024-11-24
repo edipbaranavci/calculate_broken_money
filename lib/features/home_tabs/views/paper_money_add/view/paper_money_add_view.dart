@@ -1,7 +1,9 @@
+import 'package:calculate_broken_money/product/button/save_button.dart';
+import 'package:kartal/kartal.dart';
+
 import '../../../../../core/components/app_bar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kartal/kartal.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/constants/money_counts.dart';
@@ -42,7 +44,7 @@ class _PaperMoneyAddView extends StatelessWidget {
           buildTotalMoneyTitle(context),
           context.sized.emptySizedHeightBoxLow,
           Padding(
-            padding: context.padding.horizontalNormal,
+            padding: context.padding.horizontalMedium,
             child: submitButton(context),
           ),
         ],
@@ -137,16 +139,12 @@ class _PaperMoneyAddView extends StatelessWidget {
     );
   }
 
-  ElevatedButton submitButton(BuildContext context) {
+  Widget submitButton(BuildContext context) {
     final cubit = context.read<PaperMoneyAddCubit>();
-    return ElevatedButton.icon(
+    return SaveButton(
       onPressed: () =>
           cubit.submitBox().whenComplete(() => context.route.pop()),
-      label: Padding(
-        padding: context.padding.normal,
-        child: Text(PaperStrings.instance.submitButtonTitle),
-      ),
-      icon: const Icon(Icons.save),
+      title: PaperStrings.instance.submitButtonTitle,
     );
   }
 
