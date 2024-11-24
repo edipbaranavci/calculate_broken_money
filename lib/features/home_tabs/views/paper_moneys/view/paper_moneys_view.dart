@@ -99,6 +99,7 @@ class PaperMoneys extends StatelessWidget {
     int reversedIndex,
   ) {
     return Card(
+      color: context.general.colorScheme.inversePrimary,
       child: ExpansionTile(
         shape: RoundedRectangleBorder(
           borderRadius: context.border.lowBorderRadius,
@@ -264,7 +265,9 @@ class PaperMoneys extends StatelessWidget {
         child: Text(
           title,
           style: context.general.textTheme.titleSmall?.copyWith(
-            color: isColor ? context.general.colorScheme.primary : null,
+            color: isColor
+                ? context.general.colorScheme.primary
+                : context.general.colorScheme.error,
           ),
         ),
       ),
@@ -278,7 +281,7 @@ class PaperMoneys extends StatelessWidget {
       height: context.sized.normalValue * 3,
       padding: context.padding.low,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: context.border.lowBorderRadius,
         border: Border.all(
           color: isColor
               ? context.general.colorScheme.error
@@ -286,7 +289,14 @@ class PaperMoneys extends StatelessWidget {
           width: 2,
         ),
       ),
-      child: Center(child: Text(title, maxLines: 1)),
+      child: Center(
+          child: Text(
+        title,
+        maxLines: 1,
+        style: context.general.textTheme.bodyMedium?.copyWith(
+          color: context.general.colorScheme.primary,
+        ),
+      )),
     );
   }
 

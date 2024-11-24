@@ -112,6 +112,7 @@ class BrokenMoneys extends StatelessWidget {
     int reversedIndex,
   ) {
     return Card(
+      color: context.general.colorScheme.inversePrimary,
       shape: RoundedRectangleBorder(
         borderRadius: context.border.lowBorderRadius,
       ),
@@ -241,7 +242,9 @@ class BrokenMoneys extends StatelessWidget {
         child: Text(
           title,
           style: context.general.textTheme.titleSmall?.copyWith(
-            color: isColor ? context.general.colorScheme.primary : null,
+            color: isColor
+                ? context.general.colorScheme.primary
+                : context.general.colorScheme.error,
           ),
         ),
       ),
@@ -267,6 +270,9 @@ class BrokenMoneys extends StatelessWidget {
           child: Text(
         title,
         maxLines: 1,
+        style: context.general.textTheme.bodyMedium?.copyWith(
+          color: context.general.colorScheme.primary,
+        ),
       )),
     );
   }
